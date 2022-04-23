@@ -9,6 +9,17 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+// link to Mongoose
+const mongoose = require('mongoose');
+const mongoDB = 'mongodb://admin:Xwd7WGZOsHYDWcDH@cluster0-shard-00-00.ehkr3.mongodb.net:27017,cluster0-shard-00-01.ehkr3.mongodb.net:27017,cluster0-shard-00-02.ehkr3.mongodb.net:27017/test?ssl=true&replicaSet=atlas-v7gxlc-shard-0&authSource=admin&retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
