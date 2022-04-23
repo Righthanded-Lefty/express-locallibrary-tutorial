@@ -1,3 +1,6 @@
+//  use Capitalized words (= upper camel case) in Model names:
+//  e.g. model 'Author', 'Book', 'BookInstance', 'Genre'
+
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -33,4 +36,4 @@ authorSchema
 	});
 
 //  export model
-module.exports = mongoose.model('author', authorSchema);
+module.exports = mongoose.model('Author', authorSchema);
