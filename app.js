@@ -11,7 +11,7 @@ var app = express();
 
 // link to Mongoose
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb://admin:Xwd7WGZOsHYDWcDH@cluster0-shard-00-00.ehkr3.mongodb.net:27017,cluster0-shard-00-01.ehkr3.mongodb.net:27017,cluster0-shard-00-02.ehkr3.mongodb.net:27017/test?ssl=true&replicaSet=atlas-v7gxlc-shard-0&authSource=admin&retryWrites=true&w=majority';
+const mongoDB = 'mongodb+srv://admin:Xwd7WGZOsHYDWcDH@cluster0.ehkr3.mongodb.net/myExpressLibrary?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
