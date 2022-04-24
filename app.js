@@ -10,11 +10,10 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 
+var app = express();
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catalog', catalogRouter); 
-
-var app = express();
 
 // link to Mongoose
 const mongoose = require('mongoose');
