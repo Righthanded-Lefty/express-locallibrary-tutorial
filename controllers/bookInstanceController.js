@@ -1,11 +1,11 @@
 const BookInstance = require('../models/bookinstance');
 
 exports.book_instance_list = (req, res) => {
-	res.send('To be implemented: Author List');
+	res.send('To be implemented: Book Instance (Copy) List');
 };
 
 exports.book_instance_detail = (req, res) => {
-	res.send('To be implemented: Author Detail of ' + req.params.id);
+	res.send('To be implemented: Book Instance (Copy) Detail of ' + req.params.id);
 };
 
 exports.book_instance_create_get = (req, res) => {

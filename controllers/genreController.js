@@ -1,11 +1,11 @@
 const Genre = require('../models/genre');
 
 exports.genre_list = (req, res) => {
-	res.send('To be implemented: Author List');
+	res.send('To be implemented: Genre List');
 };
 
 exports.genre_detail = (req, res) => {
-	res.send('To be implemented: Author Detail of ' + req.params.id);
+	res.send('To be implemented: Genre Detail of ' + req.params.id);
 };
 
 exports.genre_create_get = (req, res) => {

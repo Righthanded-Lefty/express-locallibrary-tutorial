@@ -5,11 +5,11 @@ exports.index = (req, res) => {
 };
 
 exports.book_list = (req, res) => {
-	res.send('To be implemented: Author List');
+	res.send('To be implemented: Book List');
 };
 
 exports.book_detail = (req, res) => {
-	res.send('To be implemented: Author Detail of ' + req.params.id);
+	res.send('To be implemented: Book Detail of ' + req.params.id);
 };
 
 exports.book_create_get = (req, res) => {
