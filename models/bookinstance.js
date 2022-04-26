@@ -1,5 +1,6 @@
 //  use Capitalized words (= upper camel case) in Model names:
 //  e.g. model 'Author', 'Book', 'BookInstance', 'Genre'
+var moment = require('moment');
 
 const mongoose = require('mongoose');
 
@@ -30,6 +31,13 @@ bookInstanceSchema
 	.virtual('url')
 	.get(function () {
 		return '/catalog/bookinstance/' + this._id;
+	});
+
+//  virtual property 'backDue formatted'
+bookInstanceSchema
+	.virtual('backDue_formatted')
+	.get(function () {
+	  return moment(this.backDue).format('MMMM Do, YYYY');
 	});
 
 //  export model
