@@ -21,6 +21,13 @@ authorSchema
 		return this.lastName + ', ' + this.firstName + '. ';
 	});
 
+//  when not displaying in citing/bibliography/reference format, use
+authorSchema
+	.virtual('name_common')
+	.get(function () {
+		return this.firstName + ' ' + this.lastName;
+	});
+
 //  virtual property 'lifespan': denote the author's lifespan
 authorSchema
 	.virtual('lifespan')
