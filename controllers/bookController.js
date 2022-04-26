@@ -39,11 +39,28 @@ exports.index = function(req, res) {
         },
     }, function(err, results) {
         res.render('index', { title: 'Local Library Home', error: err, data: results });
+        // note that field 'title' is defined here, and passed on to
+        // index.pug and layout.pug . recalled with grammar 'h1= title'
+        // & 'title= title'.
     });
 };
 
-exports.book_list = (req, res) => {
-	res.send('To be implemented: Book List');
+/*	exports.book_list = (req, res) => {
+		res.send('To be implemented: Book List');
+	};
+*/
+
+// Display list of all Books.
+exports.book_list = function(req, res, next) {
+
+  Book.find({}, 'title author')
+    .populate('author')
+    .exec(function (err, list_books) {
+      if (err) { return next(err); }
+      //Successful, so render
+      res.render('book_list', { title: 'Book List', book_list: list_books });
+    });
+
 };
 
 exports.book_detail = (req, res) => {
