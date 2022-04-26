@@ -1,6 +1,8 @@
 //  use Capitalized words (= upper camel case) in Model names:
 //  e.g. model 'Author', 'Book', 'BookInstance', 'Genre'
 
+var moment = require('moment');
+
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -26,6 +28,19 @@ authorSchema
 		return (
 			this.dateOfDeath.getYear() - this.dateOfBirth.getYear()
 			).toString();
+	});
+
+//  for sake of formatting birthdate and deathdate, add
+authorSchema
+	.virtual('dateOfBirth_formatted')
+	.get(function () {
+		return this.dateOfBirth ? moment(this.dateOfBirth).format('YYYY-MM-DD') : '?';
+	});
+
+authorSchema
+	.virtual('dateOfDeath_formatted')
+	.get(function () {
+		return this.dateOfDeath ? moment(this.dateOfDeath).format('YYYY-MM-DD') : '?';
 	});
 
 //  virtual property 'url'
