@@ -30,7 +30,7 @@ const bookInstanceSchema = new Schema ({
 bookInstanceSchema
 	.virtual('url')
 	.get(function () {
-		return '/catalog/bookinstance/' + this._id;
+		return '/catalog/book_instance/' + this._id;
 	});
 
 //  virtual property 'backDue formatted'

@@ -1,3 +1,8 @@
+var async = require('async');
+var Book = require('../models/book');
+
+var moment = require('moment');
+
 const BookInstance = require('../models/bookinstance');
 
 /*
@@ -19,8 +24,22 @@ exports.book_instance_list = function(req, res, next) {
 
 };
 
-exports.book_instance_detail = (req, res) => {
-	res.send('To be implemented: Book Instance (Copy) Detail of ' + req.params.id);
+// Display detail page for a specific BookInstance.
+exports.book_instance_detail = function(req, res, next) {
+
+  BookInstance.findById(req.params.id)
+    .populate('book')
+    .exec(function (err, results) {
+      if (err) { return next(err); }
+      if (results==null) { // No results.
+          var err = new Error('Book copy not found');
+          err.status = 404;
+          return next(err);
+        }
+      // Successful, so render.
+      res.render('book_instance_detail', { title: 'Book:', book_instance: results });
+    });
+
 };
 
 exports.book_instance_create_get = (req, res) => {
