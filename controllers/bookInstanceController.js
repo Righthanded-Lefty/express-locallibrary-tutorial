@@ -1,7 +1,22 @@
 const BookInstance = require('../models/bookinstance');
 
-exports.book_instance_list = (req, res) => {
-	res.send('To be implemented: Book Instance (Copy) List');
+/*
+	exports.book_instance_list = (req, res) => {
+		res.send('To be implemented: Book Instance (Copy) List');
+	};
+*/
+
+// Display list of all BookInstances.
+exports.book_instance_list = function(req, res, next) {
+
+  BookInstance.find()
+    .populate('book')
+    .exec(function (err, list_bookinstances) {
+      if (err) { return next(err); }
+      // Successful, so render
+      res.render('book_instance_list', { title: 'Book Instance List', book_instance_list: list_bookinstances });
+    });
+
 };
 
 exports.book_instance_detail = (req, res) => {
