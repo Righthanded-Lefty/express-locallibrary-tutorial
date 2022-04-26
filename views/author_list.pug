@@ -6,7 +6,7 @@ block content
   ul
   each author in author_list
     li
-      a(href=author.url) #{author.name_MLA}
+      a(href=author.url) #{author.name_common}&nbsp;
       | (#{author.dateOfBirth_formatted} - #{author.dateOfDeath_formatted})
 
   else
