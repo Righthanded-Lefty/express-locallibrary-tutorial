@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var logger = require('morgan');
 
 // var indexRouter = require('./routes/index');
@@ -11,6 +12,11 @@ const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 
 var app = express();
+//  Note that order of those app.use()'s is important:
+//  javascript processes codes linearly, so bodyParser (which empowers req.body.name, etc. in processing POST requests)
+//  is effective only when put before router claims.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catalog', catalogRouter); 
