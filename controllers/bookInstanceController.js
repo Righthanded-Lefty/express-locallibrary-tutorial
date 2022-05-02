@@ -39,7 +39,7 @@ exports.book_instance_detail = function(req, res, next) {
           return next(err);
         }
       // Successful, so render.
-      res.render('book_instance_detail', { title: 'Book:', book_instance: results });
+      res.render('book_instance_detail', { title: 'Book: ID = ' + req.params.id, book_instance: results });
     });
 
 };
@@ -100,12 +100,37 @@ exports.book_instance_create_post = [
     }
 ];
 
-exports.book_instance_delete_get = (req, res) => {
-	res.send('To be implemented: GET for the form of removing a bookinstance entry');
+// Display Book Instance delete form on GET.
+exports.book_instance_delete_get = function(req, res, next) {
+
+  BookInstance.findById(req.params.id)
+    .populate('book')
+    .exec(function (err, results) {
+      if (err) { return next(err); }
+      if (results==null) { // No results.
+          var err = new Error('Book copy not found');
+          err.status = 404;
+          return next(err);
+        }
+      // Successful, so render.
+      res.render('book_instance_delete', { title: 'Delete Book Instance (Copy)', book_instance: results } );
+    });
 };
 
-exports.book_instance_delete_post = (req, res) => {
-	res.send('To be implemented: POST for the form of removing a bookinstance entry');
+// Handle Book Instance delete on POST.
+exports.book_instance_delete_post = function(req, res, next) {
+
+  BookInstance.findById(req.params.id)
+    .exec(function (err, results) {
+      if (err) {return next(err); }
+      else {
+        BookInstance.findByIdAndRemove(req.params.id, function deleteBook_instance(err) {
+          if (err) {return next(err); }
+          res.redirect('/catalog/book_instances')
+        })
+      }
+
+    });
 };
 
 exports.book_instance_update_get = (req, res) => {
