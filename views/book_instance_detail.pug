@@ -18,3 +18,7 @@ block content
 
   if book_instance.status!='Available'
     p #[strong Due back:] #{book_instance.backDue_formatted}
+
+  hr
+  p
+    a(href=book_instance.url+'/delete') Delete This Copy
