@@ -180,12 +180,54 @@ exports.book_create_post = [
     }
 ];
 
-exports.book_delete_get = (req, res) => {
-	res.send('To be implemented: GET for the form of removing a book entry');
+// Display Book delete form on GET.
+exports.book_delete_get = function(req, res, next) {
+
+    async.parallel({
+        book: function(callback) {
+            Book.findById(req.params.id).exec(callback)
+        },
+        book_s_copies: function(callback) {
+            BookInstance.find({ 'book': req.params.id }).exec(callback)
+        },
+    }, function(err, results) {
+        if (err) { return next(err); }
+        if (results.book==null) { // No results.
+            res.redirect('/catalog/books');
+        }
+        // Successful, so render.
+        res.render('book_delete', { title: 'Delete Book', book: results.book, book_instances: results.book_s_copies } );
+    });
+
 };
 
-exports.book_delete_post = (req, res) => {
-	res.send('To be implemented: POST for the form of removing a book entry');
+// Handle Book delete on POST.
+exports.book_delete_post = function(req, res, next) {
+
+    async.parallel({
+        book: function(callback) {
+          Book.findById(req.body.bookid).exec(callback)
+        },
+        book_s_copies: function(callback) {
+          BookInstance.find({ 'book': req.body.bookid }).exec(callback)
+        },
+    }, function(err, results) {
+        if (err) { return next(err); }
+        // Success
+        if (results.book_s_copies.length > 0) {
+            // Book has copies. Render in same way as for GET route.
+            res.render('book_delete', { title: 'Delete Book', book: results.book, book_instances: results.book_s_copies } );
+            return;
+        }
+        else {
+            // Book has no copy. Delete object and redirect to the list of books.
+            Book.findByIdAndRemove(req.body.genreid, function deleteBook(err) {
+                if (err) { return next(err); }
+                // Success - go to book list
+                res.redirect('/catalog/books')
+            })
+        }
+    });
 };
 
 // Display book update form on GET.
