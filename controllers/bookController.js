@@ -124,9 +124,9 @@ exports.book_create_post = [
     },
 
     // Validate and sanitize fields.
-    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
+    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
+    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
     body('isbn', 'ISBN must not be empty').trim().isLength({ min: 1 }).escape(),
     body('genre.*').escape(),
 
@@ -185,7 +185,10 @@ exports.book_delete_get = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).exec(callback)
+            Book.findById(req.params.id)
+            .populate('author')
+            .populate('genre')
+            .exec(callback)
         },
         book_s_copies: function(callback) {
             BookInstance.find({ 'book': req.params.id }).exec(callback)
@@ -206,7 +209,10 @@ exports.book_delete_post = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-          Book.findById(req.body.bookid).exec(callback)
+          Book.findById(req.body.bookid)
+          .populate('author')
+          .populate('genre')
+          .exec(callback)
         },
         book_s_copies: function(callback) {
           BookInstance.find({ 'book': req.body.bookid }).exec(callback)
@@ -280,9 +286,9 @@ exports.book_update_post = [
     },
 
     // Validate and sanitize fields.
-    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
+    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
+    body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape().unescape('&#x27;'),
     body('isbn', 'ISBN must not be empty').trim().isLength({ min: 1 }).escape(),
     body('genre.*').escape(),
 
