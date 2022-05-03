@@ -140,8 +140,20 @@ exports.author_delete_post = function(req, res, next) {
     });
 };
 
-exports.author_update_get = (req, res) => {
-	res.send('To be implemented: GET for the form of updating an author entry');
+// Display author update form on GET.
+exports.author_update_get = function(req, res, next) {
+
+    // Get author for form.
+    Author.findById(req.params.id).exec(function(err, results) {
+      if (err) {return next(err); }
+      if (results==null) { // No results.
+        var err = new Error('Author not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('author_form', { title: 'Update Author Info: ' + results.name_common, author: results });
+    });
+
 };
 
 exports.author_update_post = (req, res) => {
