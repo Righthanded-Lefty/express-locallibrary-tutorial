@@ -32,7 +32,7 @@ app.use('/catalog', catalogRouter); // Add catalog routes to middleware chain.
 
 // link to Mongoose
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb+srv://admin:Xwd7WGZOsHYDWcDH@cluster0.ehkr3.mongodb.net/myExpressLibrary?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGODB_URI || 'mongodb+srv://admin:Xwd7WGZOsHYDWcDH@cluster0.ehkr3.mongodb.net/myExpressLibrary?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
