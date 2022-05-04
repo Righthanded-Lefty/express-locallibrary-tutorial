@@ -16,7 +16,7 @@ block content
       input#imprint.form-control(type='text' placeholder='Publisher and date information' name='imprint' required='true' value=(undefined===book_instance ? '' : book_instance.imprint))
     div.form-group
       label(for='backDue') Date when book available:
-      input#due_back.form-control(type='date' name='backDue' value=(undefined===book_instance ? '' : book_instance.backDue))
+      input#due_back.form-control(type='date' name='backDue' value=(undefined===book_instance ? '' : book_instance.backDue_formatted_YMD))
 
     div.form-group
       label(for='status') Status:

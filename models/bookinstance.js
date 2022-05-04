@@ -37,7 +37,14 @@ bookInstanceSchema
 bookInstanceSchema
 	.virtual('backDue_formatted')
 	.get(function () {
-	  return moment(this.backDue).format('MMMM Do, YYYY');
+	  return this.backDue ? moment(this.backDue).format('MMMM Do, YYYY') : '?';
+	});
+
+//  virtual property 'backDue formatted'
+bookInstanceSchema
+	.virtual('backDue_formatted_YMD')
+	.get(function () {
+	  return this.backDue ? moment(this.backDue).format('YYYY-MM-DD') : '?';
 	});
 
 //  export model

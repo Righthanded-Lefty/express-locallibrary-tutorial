@@ -133,8 +133,26 @@ exports.book_instance_delete_post = function(req, res, next) {
     });
 };
 
-exports.book_instance_update_get = (req, res) => {
-	res.send('To be implemented: GET for the form of updating a bookinstance entry');
+exports.book_instance_update_get = function(req, res, next) {
+  async.parallel( {
+    book_instance: function(callback) {
+      BookInstance.findById(req.params.id)
+        .populate('book')
+        .exec(callback); },
+    books: function(callback) {
+      Book.find(callback);
+    },
+  },
+    
+    function (err, results) {
+      if (err) { return next(err); }
+      if (results.book_instance==null) {
+        var err = new Error('Book copy not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('book_instance_form', { title: 'Update Book Copy Info', book_list: results.books, book_instance: results.book_instance } );
+    });
 };
 
 exports.book_instance_update_post = (req, res) => {
