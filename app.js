@@ -10,16 +10,22 @@ var logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
+var compression = require('compression');
 
 var app = express();
 //  Note that order of those app.use()'s is important:
 //  javascript processes codes linearly, so bodyParser (which empowers req.body.name, etc. in processing POST requests)
 //  is effective only when put before router claims.
+
+app.use(compression()); //Compress all routes
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/catalog', catalogRouter); 
+app.use('/catalog', catalogRouter); // Add catalog routes to middleware chain.
 
 // link to Mongoose
 const mongoose = require('mongoose');
