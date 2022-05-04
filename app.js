@@ -11,12 +11,15 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const catalogRouter = require('./routes/catalog');
 var compression = require('compression');
+var helmet = require('helmet');
 
+// Create the Express application object
 var app = express();
 //  Note that order of those app.use()'s is important:
 //  javascript processes codes linearly, so bodyParser (which empowers req.body.name, etc. in processing POST requests)
 //  is effective only when put before router claims.
 
+app.use(helmet());
 app.use(compression()); //Compress all routes
 
 app.use(express.static(path.join(__dirname, 'public')));
