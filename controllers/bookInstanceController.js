@@ -155,6 +155,49 @@ exports.book_instance_update_get = function(req, res, next) {
     });
 };
 
-exports.book_instance_update_post = (req, res) => {
-	res.send('To be implemented: POST for the form of updating a bookinstance entry');
-};
+exports.book_instance_update_post = [
+    // Validate and sanitize fields.
+    body('book', 'Book must be specified').trim().isLength({ min: 1 }).escape(),
+    body('imprint', 'Imprint must be specified').trim().isLength({ min: 1 }).escape(),
+    body('status').escape(),
+    body('backDue', 'Invalid date').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+    (req, res, next) => {
+
+      const errors = validationResult(req);
+
+      // Create a BookInstance object with escaped and trimmed data, with the same ID.
+      var book_instance = new BookInstance(
+        { book: req.body.book,
+          imprint: req.body.imprint,
+          status: req.body.status,
+          backDue: req.body.backDue,
+          _id: req.params.id,
+         });
+
+      if (!errors.isEmpty()) {  // there is error. render form again with error hint.
+        async.parallel( {
+          books: function(callback) {
+            Book.find(callback);
+          },
+        },
+          
+          function (err, results) {
+            if (err) { return next(err); }
+
+            res.render('book_instance_form', { title: 'Update Book Copy Info', book_list: results.books, book_instance: book_instance } );
+          });
+      }
+      
+      else {
+        // Data from form is valid. Update the record.
+        BookInstance.findByIdAndUpdate(req.params.id, book_instance, {}, function (err,thecopy) {
+          if (err) { return next(err); }
+              // Successful - redirect to book copy detail page.
+              res.redirect(thecopy.url);
+          });
+      }
+
+
+    }
+]
