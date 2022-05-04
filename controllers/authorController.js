@@ -156,6 +156,42 @@ exports.author_update_get = function(req, res, next) {
 
 };
 
-exports.author_update_post = (req, res) => {
-	res.send('To be implemented: POST for the form of updating an author entry');
-};
+exports.author_update_post = [
+
+    // Validate and sanitize fields.
+    body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
+        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
+        .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+    body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+    body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+
+    (req, res, next) => {
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create an Author object with escaped/trimmed data and old id.
+        var author = new Author(
+            { 
+                firstName: req.body.first_name,
+                lastName: req.body.family_name,
+                dateOfBirth: req.body.date_of_birth,
+                dateOfDeath: req.body.date_of_death,
+                _id:req.params.id // This is required, or a new ID will be assigned!
+            });
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values/error messages.
+            res.render('genre_form', { title: 'Update Author Info', author: author, errors: errors.array()});
+            return;
+        }
+
+        else {
+            Author.findByIdAndUpdate(req.params.id, author, {}, function (err,theauthor) {
+                if (err) {return next(err); }
+                //  Author Updated and saved. redirect to detail page.
+                res.redirect(theauthor.url);
+            });
+        }
+    }
+];
